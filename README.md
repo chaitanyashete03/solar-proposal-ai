@@ -3,7 +3,7 @@
 An industry-ready, AI-powered solar proposal generation system and mini-CRM. This project automates the complex calculation of ROI, system sizing, and carbon offsetting, producing a premium-ready PDF proposal for clients in seconds.
 
 ## 🚀 Live Demo
-[Deploy your live link here (e.g. Vercel)]
+[https://solarproposalai.vercel.app]
 
 ## ✨ Key Features
 - **AI-Powered Proposal Generation:** Uses Google Gemini 1.5 Flash API to generate highly persuasive, structured solar proposals in realtime.
