@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Solar Proposal Generator</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Styles -->
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="ri-sun-fill"></i>
+                <h1>Sun AI</h1>
+            </div>
+            <div class="header-actions">
+                <button id="settingsBtn" class="btn btn-secondary">
+                    <i class="ri-settings-3-line"></i> API Settings
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="dashboard-grid">
+            <!-- Left Column: Lead Input Form -->
+            <section class="panel form-panel">
+                <div class="panel-header">
+                    <h2><i class="ri-user-add-line"></i> New Lead</h2>
+                    <p>Enter details to calculate system and generate proposal.</p>
+                </div>
+                
+                <form id="leadForm" class="lead-form">
+                    <div class="form-group">
+                        <label for="customerName">Customer Name</label>
+                        <input type="text" id="customerName" required placeholder="e.g. Ramesh Kumar">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactInfo">Phone / Email</label>
+                        <input type="text" id="contactInfo" required placeholder="ramesh@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City / Location</label>
+                        <input type="text" id="city" required placeholder="Pune, MH">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monthlyBill">Avg. Monthly Bill (₹)</label>
+                            <input type="number" id="monthlyBill" required min="500" placeholder="e.g. 4000">
+                        </div>
+                        <div class="form-group">
+                            <label for="propertyType">Property Type</label>
+                            <select id="propertyType" required>
+                                <option value="Residential">Residential</option>
+                                <option value="Commercial">Commercial</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="ri-flashlight-line"></i> Calculate & Add Lead
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Column: CRM / Lead Tracking Room -->
+            <section class="panel crm-panel">
+                <div class="panel-header">
+                    <h2><i class="ri-database-2-line"></i> Pipeline Tracker</h2>
+                    <span id="leadCount" class="badge">0 Leads</span>
+                </div>
+                
+                <div class="table-container">
+                    <table id="crmTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Bill (₹)</th>
+                                <th>System</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="crmBody">
+                            <!-- Rows dynamically populated here -->
+                            <tr class="empty-row"><td colspan="5">No leads yet. Add one to get started!</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- API Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gemini API Configuration</h2>
+                <i class="ri-close-line close-modal" id="closeSettings"></i>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">Enter your Google Gemini API key to enable AI-powered proposal generation. This is saved securely in your browser's local storage.</p>
+                <div class="form-group mt-3">
+                    <label for="apiKey">Secret API Key</label>
+                    <input type="password" id="apiKey" placeholder="AIzaSy...">
+                </div>
+                <button id="saveApiBtn" class="btn btn-primary mt-2">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proposal View Modal -->
+    <div id="proposalModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2 id="proposalTitle">Generating Proposal...</h2>
+                <div class="proposal-actions">
+                    <button id="printBtn" class="btn btn-secondary disabled"><i class="ri-printer-line"></i> Save PDF</button>
+                    <i class="ri-close-line close-modal" id="closeProposal"></i>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div id="loadingState" class="loading-state hidden">
+                    <div class="spinner"></div>
+                    <p>AI is consulting the sun...</p>
+                </div>
+                <div id="proposalContent" class="proposal-document">
+                    <!-- Markdown rendered HTML goes here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
