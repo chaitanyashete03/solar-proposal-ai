@@ -310,6 +310,8 @@ function generatePDF() {
     };
     
     html2pdf().set(opt).from(proposalContent).save();
+}
+
 // -------------------------------------------------------------
 // Data Visualization (Chart.js)
 // -------------------------------------------------------------
