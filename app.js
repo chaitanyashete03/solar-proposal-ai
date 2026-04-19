@@ -1,9 +1,7 @@
 // Initial State & Local Storage Setup
 let leads = JSON.parse(localStorage.getItem('solarLeads')) || [];
+let leads = JSON.parse(localStorage.getItem('solarLeads')) || [];
 let apiKey = localStorage.getItem('geminiApiKey') || '';
-let userEmail = localStorage.getItem('userEmail') || 'solutions@solara-pro.ai';
-let userPhone = localStorage.getItem('userPhone') || '+91 98765 43210';
-let userWebsite = localStorage.getItem('userWebsite') || 'www.solara-pro.ai';
 
 // DOM Elements
 const form = document.getElementById('leadForm');
@@ -18,12 +16,8 @@ const closeSettingsBtn = document.getElementById('closeSettings');
 const closeProposalBtn = document.getElementById('closeProposal');
 const leadsMobileGrid = document.getElementById('leadsMobileGrid');
 
-// Settings Elements
 const apiKeyInput = document.getElementById('apiKey');
 const saveApiBtn = document.getElementById('saveApiBtn');
-const emailInput = document.getElementById('userEmail');
-const phoneInput = document.getElementById('userPhone');
-const websiteInput = document.getElementById('userWebsite');
 
 // Proposal Elements
 const proposalContent = document.getElementById('proposalContent');
@@ -31,12 +25,8 @@ const proposalTitle = document.getElementById('proposalTitle');
 const loadingState = document.getElementById('loadingState');
 const printBtn = document.getElementById('printBtn');
 
-// Initialize app
 function init() {
     apiKeyInput.value = apiKey;
-    emailInput.value = userEmail;
-    phoneInput.value = userPhone;
-    websiteInput.value = userWebsite;
     renderCRM();
 }
 
@@ -48,17 +38,8 @@ closeProposalBtn.addEventListener('click', () => proposalModal.classList.remove(
 
 saveApiBtn.addEventListener('click', () => {
     apiKey = apiKeyInput.value.trim();
-    userEmail = emailInput.value.trim() || 'solutions@solara-pro.ai';
-    userPhone = phoneInput.value.trim() || '+91 98765 43210';
-    userWebsite = websiteInput.value.trim() || 'www.solara-pro.ai';
-
     localStorage.setItem('geminiApiKey', apiKey);
-    localStorage.setItem('userEmail', userEmail);
-    localStorage.setItem('userPhone', userPhone);
-    localStorage.setItem('userWebsite', userWebsite);
-
     settingsModal.classList.remove('active');
-    alert("Profile saved successfully!");
 });
 
 printBtn.addEventListener('click', generatePDF);
@@ -68,13 +49,14 @@ function handleNewLead(e) {
     e.preventDefault();
 
     const name = document.getElementById('customerName').value;
-    const info = document.getElementById('contactInfo').value;
+    const phone = document.getElementById('customerPhone').value;
+    const email = document.getElementById('customerEmail').value;
     const city = document.getElementById('city').value;
     const bill = parseFloat(document.getElementById('monthlyBill').value);
     const type = document.getElementById('propertyType').value;
 
     // Calculations based on the spec
-    const systemSize = (bill / 100).toFixed(1); // Spec: Bill / 100
+    const systemSize = (bill / 100).toFixed(1);
     const estimatedCost = Math.round(systemSize * 60000);
     const monthlySavings = Math.round(bill * 0.8);
     const paybackYears = (estimatedCost / (monthlySavings * 12)).toFixed(1);
@@ -82,7 +64,8 @@ function handleNewLead(e) {
     const newLead = {
         id: Date.now().toString(),
         name,
-        info,
+        phone,
+        email,
         city,
         bill,
         type,
@@ -90,7 +73,7 @@ function handleNewLead(e) {
         estimatedCost,
         monthlySavings,
         paybackYears,
-        status: 'Pending', // Pending | Generated
+        status: 'Pending',
         proposalHtml: null
     };
 
@@ -115,7 +98,7 @@ function renderCRM() {
         <tr>
             <td>
                 <strong>${lead.name}</strong><br>
-                <span class="text-muted" style="font-size:0.8rem">${lead.city} &bull; ${lead.type}</span>
+                <span class="text-muted" style="font-size:0.8rem">${lead.city} &bull; ${lead.phone}</span>
             </td>
             <td>₹${lead.bill.toLocaleString()}</td>
             <td>${lead.systemSize} kW</td>
@@ -142,12 +125,12 @@ function renderCRM() {
             </div>
             <div class="lead-card-meta">
                 <div>
-                    <label style="font-size:0.7rem; margin:0">System Size</label>
-                    <span class="meta-value">${lead.systemSize} kW</span>
+                    <label style="font-size:0.7rem; margin:0">City</label>
+                    <span class="meta-value">${lead.city}</span>
                 </div>
                 <div>
-                    <label style="font-size:0.7rem; margin:0">Monthly Bill</label>
-                    <span class="meta-value">₹${lead.bill.toLocaleString()}</span>
+                    <label style="font-size:0.7rem; margin:0">Phone</label>
+                    <span class="meta-value">${lead.phone}</span>
                 </div>
             </div>
             <div style="display:flex; gap:0.5rem">
@@ -232,7 +215,8 @@ async function openProposal(leadId) {
                     <div class="client-info">
                         <p class="meta-label">Prepared Exclusively For</p>
                         <h2>${lead.name}</h2>
-                        <p><i class="ri-map-pin-2-line"></i> ${lead.city} &bull; ${lead.type} Property</p>
+                        <p><i class="ri-map-pin-2-line"></i> ${lead.city} &bull; ${lead.phone}</p>
+                        <p><i class="ri-mail-line"></i> ${lead.email}</p>
                     </div>
                 </div>
 
@@ -276,9 +260,8 @@ async function openProposal(leadId) {
                             <p><strong>Energy Lead Consultant</strong></p>
                         </div>
                         <div class="contact-block">
-                            <p><i class="ri-global-line"></i> ${userWebsite}</p>
-                            <p><i class="ri-mail-line"></i> ${userEmail}</p>
-                            <p><i class="ri-phone-line"></i> ${userPhone}</p>
+                            <p><i class="ri-global-line"></i> www.solara-pro.ai</p>
+                            <p><i class="ri-mail-line"></i> solutions@solara-pro.ai</p>
                         </div>
                     </div>
                     <div class="disclaimer-area">
