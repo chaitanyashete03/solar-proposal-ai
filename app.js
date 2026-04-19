@@ -1,6 +1,9 @@
 // Initial State & Local Storage Setup
 let leads = JSON.parse(localStorage.getItem('solarLeads')) || [];
 let apiKey = localStorage.getItem('geminiApiKey') || '';
+let userEmail = localStorage.getItem('userEmail') || 'solutions@solara-pro.ai';
+let userPhone = localStorage.getItem('userPhone') || '+91 98765 43210';
+let userWebsite = localStorage.getItem('userWebsite') || 'www.solara-pro.ai';
 
 // DOM Elements
 const form = document.getElementById('leadForm');
@@ -18,6 +21,9 @@ const leadsMobileGrid = document.getElementById('leadsMobileGrid');
 // Settings Elements
 const apiKeyInput = document.getElementById('apiKey');
 const saveApiBtn = document.getElementById('saveApiBtn');
+const emailInput = document.getElementById('userEmail');
+const phoneInput = document.getElementById('userPhone');
+const websiteInput = document.getElementById('userWebsite');
 
 // Proposal Elements
 const proposalContent = document.getElementById('proposalContent');
@@ -28,6 +34,9 @@ const printBtn = document.getElementById('printBtn');
 // Initialize app
 function init() {
     apiKeyInput.value = apiKey;
+    emailInput.value = userEmail;
+    phoneInput.value = userPhone;
+    websiteInput.value = userWebsite;
     renderCRM();
 }
 
@@ -39,8 +48,17 @@ closeProposalBtn.addEventListener('click', () => proposalModal.classList.remove(
 
 saveApiBtn.addEventListener('click', () => {
     apiKey = apiKeyInput.value.trim();
+    userEmail = emailInput.value.trim() || 'solutions@solara-pro.ai';
+    userPhone = phoneInput.value.trim() || '+91 98765 43210';
+    userWebsite = websiteInput.value.trim() || 'www.solara-pro.ai';
+
     localStorage.setItem('geminiApiKey', apiKey);
+    localStorage.setItem('userEmail', userEmail);
+    localStorage.setItem('userPhone', userPhone);
+    localStorage.setItem('userWebsite', userWebsite);
+
     settingsModal.classList.remove('active');
+    alert("Profile saved successfully!");
 });
 
 printBtn.addEventListener('click', generatePDF);
@@ -258,8 +276,9 @@ async function openProposal(leadId) {
                             <p><strong>Energy Lead Consultant</strong></p>
                         </div>
                         <div class="contact-block">
-                            <p><i class="ri-global-line"></i> www.solara-pro.ai</p>
-                            <p><i class="ri-mail-line"></i> solutions@solara-pro.ai</p>
+                            <p><i class="ri-global-line"></i> ${userWebsite}</p>
+                            <p><i class="ri-mail-line"></i> ${userEmail}</p>
+                            <p><i class="ri-phone-line"></i> ${userPhone}</p>
                         </div>
                     </div>
                     <div class="disclaimer-area">

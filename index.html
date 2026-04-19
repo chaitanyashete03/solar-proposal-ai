@@ -114,16 +114,36 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Gemini API Configuration</h2>
+                <h2>Company Settings</h2>
                 <i class="ri-close-line close-modal" id="closeSettings"></i>
             </div>
-            <div class="modal-body">
-                <p class="text-muted">Enter your Google Gemini API key to enable AI-powered proposal generation. This is saved securely in your browser's local storage.</p>
+            <div class="modal-body" style="padding: 2rem;">
+                <p class="text-muted">Personalize your proposals with your contact information. These details will appear in the PDF footer.</p>
+                
                 <div class="form-group mt-3">
-                    <label for="apiKey">Secret API Key</label>
+                    <label>Gemini API Key</label>
                     <input type="password" id="apiKey" placeholder="AIzaSy...">
                 </div>
-                <button id="saveApiBtn" class="btn btn-primary mt-2">Save Settings</button>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Business Email</label>
+                        <input type="email" id="userEmail" placeholder="you@company.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Number</label>
+                        <input type="tel" id="userPhone" placeholder="+91 98765 43210">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Website URL</label>
+                    <input type="text" id="userWebsite" placeholder="www.yourcompany.com">
+                </div>
+
+                <button id="saveApiBtn" class="btn btn-primary btn-block">
+                    <i class="ri-save-3-line"></i> Save Profile
+                </button>
             </div>
         </div>
     </div>
