@@ -1,48 +1,61 @@
-// Initial State & Local Storage Setup
-let leads = JSON.parse(localStorage.getItem('solarLeads')) || [];
+// Initial State & Local Storage Setup (Global)
 let leads = JSON.parse(localStorage.getItem('solarLeads')) || [];
 let apiKey = localStorage.getItem('geminiApiKey') || '';
 
-// DOM Elements
-const form = document.getElementById('leadForm');
-const crmBody = document.getElementById('crmBody');
-const leadCount = document.getElementById('leadCount');
+// DOM Reference holders
+let form, crmBody, leadCount, leadsMobileGrid, settingsModal, proposalModal, settingsBtn, closeSettingsBtn, closeProposalBtn, apiKeyInput, saveApiBtn, proposalContent, proposalTitle, loadingState, printBtn;
 
-// Modals
-const settingsModal = document.getElementById('settingsModal');
-const proposalModal = document.getElementById('proposalModal');
-const settingsBtn = document.getElementById('settingsBtn');
-const closeSettingsBtn = document.getElementById('closeSettings');
-const closeProposalBtn = document.getElementById('closeProposal');
-const leadsMobileGrid = document.getElementById('leadsMobileGrid');
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
+    form = document.getElementById('leadForm');
+    crmBody = document.getElementById('crmBody');
+    leadCount = document.getElementById('leadCount');
+    leadsMobileGrid = document.getElementById('leadsMobileGrid');
 
-const apiKeyInput = document.getElementById('apiKey');
-const saveApiBtn = document.getElementById('saveApiBtn');
+    // Modals
+    settingsModal = document.getElementById('settingsModal');
+    proposalModal = document.getElementById('proposalModal');
+    settingsBtn = document.getElementById('settingsBtn');
+    closeSettingsBtn = document.getElementById('closeSettings');
+    closeProposalBtn = document.getElementById('closeProposal');
 
-// Proposal Elements
-const proposalContent = document.getElementById('proposalContent');
-const proposalTitle = document.getElementById('proposalTitle');
-const loadingState = document.getElementById('loadingState');
-const printBtn = document.getElementById('printBtn');
+    // Settings
+    apiKeyInput = document.getElementById('apiKey');
+    saveApiBtn = document.getElementById('saveApiBtn');
 
-function init() {
-    apiKeyInput.value = apiKey;
+    // Proposal elements
+    proposalContent = document.getElementById('proposalContent');
+    proposalTitle = document.getElementById('proposalTitle');
+    loadingState = document.getElementById('loadingState');
+    printBtn = document.getElementById('printBtn');
+
+    // Initialization
+    if (apiKeyInput) apiKeyInput.value = apiKey;
     renderCRM();
-}
 
-// Event Listeners
-form.addEventListener('submit', handleNewLead);
-settingsBtn.addEventListener('click', () => settingsModal.classList.add('active'));
-closeSettingsBtn.addEventListener('click', () => settingsModal.classList.remove('active'));
-closeProposalBtn.addEventListener('click', () => proposalModal.classList.remove('active'));
+    // Event Listeners
+    if (form) form.addEventListener('submit', handleNewLead);
+    if (settingsBtn) settingsBtn.addEventListener('click', () => {
+        if (settingsModal) settingsModal.classList.add('active');
+    });
+    if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', () => {
+        if (settingsModal) settingsModal.classList.remove('active');
+    });
+    if (closeProposalBtn) closeProposalBtn.addEventListener('click', () => {
+        if (proposalModal) proposalModal.classList.remove('active');
+    });
 
-saveApiBtn.addEventListener('click', () => {
-    apiKey = apiKeyInput.value.trim();
-    localStorage.setItem('geminiApiKey', apiKey);
-    settingsModal.classList.remove('active');
+    if (saveApiBtn) saveApiBtn.addEventListener('click', () => {
+        if (apiKeyInput) {
+            apiKey = apiKeyInput.value.trim();
+            localStorage.setItem('geminiApiKey', apiKey);
+            if (settingsModal) settingsModal.classList.remove('active');
+            alert("Settings saved successfully!");
+        }
+    });
+
+    if (printBtn) printBtn.addEventListener('click', generatePDF);
 });
-
-printBtn.addEventListener('click', generatePDF);
 
 // Core Logic: Form Submission
 function handleNewLead(e) {
@@ -488,5 +501,5 @@ function renderROIChart(lead) {
     });
 }
 
-// Boot up
-init();
+// Boot handled by DOMContentLoaded
+
