@@ -61,12 +61,32 @@ document.addEventListener('DOMContentLoaded', () => {
 function handleNewLead(e) {
     e.preventDefault();
 
-    const name = document.getElementById('customerName').value;
-    const phone = document.getElementById('customerPhone').value;
-    const email = document.getElementById('customerEmail').value;
-    const city = document.getElementById('city').value;
+    const name = document.getElementById('customerName').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    const email = document.getElementById('customerEmail').value.trim();
+    const city = document.getElementById('city').value.trim();
     const bill = parseFloat(document.getElementById('monthlyBill').value);
     const type = document.getElementById('propertyType').value;
+
+    // Enhanced Validations
+    if (name.length < 2) {
+        alert("Please enter a valid customer name.");
+        return;
+    }
+
+    // Email Regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address (e.g., name@example.com).");
+        return;
+    }
+
+    // Phone Regex (supports various formats, simple check)
+    const phoneRegex = /^[+]?[\d\s\-]{10,15}$/;
+    if (!phoneRegex.test(phone)) {
+        alert("Please enter a valid contact number (at least 10 digits).");
+        return;
+    }
 
     // Calculations based on the spec
     const systemSize = (bill / 100).toFixed(1);
