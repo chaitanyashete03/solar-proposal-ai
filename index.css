@@ -500,3 +500,30 @@ tbody tr:hover {
 
 @keyframes spin { 100% { transform: rotate(360deg); } }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* -------------------------------------------------------------
+ * PDF Pagination Protections - "Best of Best" Formatting
+ * ------------------------------------------------------------- */
+.proposal-body h2, 
+.proposal-body h3, 
+.proposal-body p, 
+.proposal-body ul, 
+.proposal-body li,
+.chart-wrapper,
+.letterhead-footer {
+    /* Prevent these elements from being sliced in half by html2pdf */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}
+
+.proposal-body h2, 
+.proposal-body h3 {
+    /* Prevent headers from sitting alone at the bottom of a page */
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+}
+
+.letterhead-client {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+}

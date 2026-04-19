@@ -302,11 +302,12 @@ function generatePDF() {
     
     // Temporarily hide actions for printing
     const opt = {
-        margin:       1,
+        margin:       [0.4, 0, 0.4, 0], // Margins for top and bottom to avoid absolute edge cutting
         filename:     `${proposalTitle.innerText.replace(/\s+/g, '_')}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        image:        { type: 'jpeg', quality: 1.0 }, // Max quality
+        html2canvas:  { scale: 3, useCORS: true, letterRendering: true }, // Ultra crisp resolution 
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
+        pagebreak:    { mode: ['css', 'legacy'] } // Enable smart CSS based page breaking
     };
     
     html2pdf().set(opt).from(proposalContent).save();
