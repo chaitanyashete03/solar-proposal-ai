@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Solar Proposal Generator</title>
+    <title>Solara Pro AI | Premium Solar Generator</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,7 +22,7 @@
         <header class="app-header">
             <div class="logo">
                 <i class="ri-sun-fill"></i>
-                <h1>Sun AI</h1>
+                <h1>Solara Pro AI</h1>
             </div>
             <div class="header-actions">
                 <button id="settingsBtn" class="btn btn-secondary">
@@ -95,10 +95,16 @@
                             </tr>
                         </thead>
                         <tbody id="crmBody">
-                            <!-- Rows dynamically populated here -->
-                            <tr class="empty-row"><td colspan="5">No leads yet. Add one to get started!</td></tr>
+                            <tr class="empty-row"><td colspan="5">No leads yet.</td></tr>
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Mobile Lead Cards (Visible only on mobile via CSS) -->
+                <div id="leadsMobileGrid" class="leads-mobile-grid">
+                    <div class="empty-message" style="text-align:center; padding: 2rem; color: var(--text-muted);">
+                        No leads yet. Add one to get started!
+                    </div>
                 </div>
             </section>
         </main>

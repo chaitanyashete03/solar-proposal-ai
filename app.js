@@ -13,6 +13,7 @@ const proposalModal = document.getElementById('proposalModal');
 const settingsBtn = document.getElementById('settingsBtn');
 const closeSettingsBtn = document.getElementById('closeSettings');
 const closeProposalBtn = document.getElementById('closeProposal');
+const leadsMobileGrid = document.getElementById('leadsMobileGrid');
 
 // Settings Elements
 const apiKeyInput = document.getElementById('apiKey');
@@ -86,10 +87,12 @@ function renderCRM() {
     leadCount.innerText = `${leads.length} Leads`;
     
     if (leads.length === 0) {
-        crmBody.innerHTML = '<tr class="empty-row"><td colspan="5">No leads yet. Add one to get started!</td></tr>';
+        crmBody.innerHTML = '<tr class="empty-row"><td colspan="5">No leads yet.</td></tr>';
+        leadsMobileGrid.innerHTML = '<div class="empty-message" style="text-align:center; padding: 2rem; color: var(--text-muted);">No leads yet. Add one to get started!</div>';
         return;
     }
 
+    // Render Table (Desktop)
     crmBody.innerHTML = leads.map(lead => `
         <tr>
             <td>
@@ -110,6 +113,34 @@ function renderCRM() {
                 </button>
             </td>
         </tr>
+    `).join('');
+
+    // Render Cards (Mobile)
+    leadsMobileGrid.innerHTML = leads.map(lead => `
+        <div class="lead-card">
+            <div class="lead-card-header">
+                <span class="lead-card-name">${lead.name}</span>
+                <span class="status-badge status-${lead.status.toLowerCase()}">${lead.status}</span>
+            </div>
+            <div class="lead-card-meta">
+                <div>
+                    <label style="font-size:0.7rem; margin:0">System Size</label>
+                    <span class="meta-value">${lead.systemSize} kW</span>
+                </div>
+                <div>
+                    <label style="font-size:0.7rem; margin:0">Monthly Bill</label>
+                    <span class="meta-value">₹${lead.bill.toLocaleString()}</span>
+                </div>
+            </div>
+            <div style="display:flex; gap:0.5rem">
+                <button class="btn btn-primary btn-block" onclick="openProposal('${lead.id}')">
+                    ${lead.status === 'Pending' ? 'Generate Proposal' : 'View Proposal'}
+                </button>
+                <button class="btn btn-secondary" onclick="deleteLead('${lead.id}')" style="color:var(--danger)">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>
+        </div>
     `).join('');
 }
 
@@ -169,7 +200,7 @@ async function openProposal(leadId) {
             <div class="proposal-letterhead">
                 <div class="letterhead-top">
                     <div>
-                        <h1 class="company-brand"><i class="ri-sun-fill"></i> Sun AI Solutions</h1>
+                        <h1 class="company-brand"><i class="ri-sun-fill"></i> Solara Pro AI</h1>
                         <p class="company-tagline">Premium Solar Architecture</p>
                     </div>
                     <div class="letterhead-meta">
@@ -186,8 +217,8 @@ async function openProposal(leadId) {
                 <div class="proposal-body">
                     ${rawHtml}
                     
-                    <div class="chart-wrapper" style="margin: 3rem 0; padding: 1.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
-                        <h3 style="margin-top:0; color:#0f172a; text-align:center;">10-Year ROI Projection</h3>
+                    <div class="chart-wrapper" style="margin: 3rem 0; padding: 2rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+                        <h3 style="margin-top:0; color:#0f172a; text-align:center; font-family:'Outfit';">10-Year ROI Projection</h3>
                         <canvas id="roiChart" style="max-height: 350px;"></canvas>
                     </div>
                 </div>
@@ -347,17 +378,19 @@ function renderROIChart(lead) {
                     label: 'Cost Without Solar (₹)',
                     data: cumulativeGrid,
                     borderColor: '#ef4444',
-                    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                    borderWidth: 3,
+                    backgroundColor: 'rgba(239, 68, 68, 0.05)',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#ef4444',
                     fill: true,
                     tension: 0.4
                 },
                 {
                     label: 'Cost With Solar (₹)',
                     data: cumulativeSolar,
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    borderWidth: 3,
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                    borderWidth: 4,
+                    pointBackgroundColor: '#f59e0b',
                     fill: true,
                     tension: 0.4
                 }
@@ -365,10 +398,22 @@ function renderROIChart(lead) {
         },
         options: {
             responsive: true,
-            animation: false, // Critical so html2pdf captures it instantly
+            maintainAspectRatio: false,
+            animation: false,
             plugins: {
-                legend: { position: 'top', labels: { font: { family: 'Plus Jakarta Sans', weight: 'bold' } } },
+                legend: { 
+                    position: 'top', 
+                    labels: { 
+                        font: { family: 'Plus Jakarta Sans', weight: '700', size: 12 },
+                        usePointStyle: true,
+                        padding: 20
+                    } 
+                },
                 tooltip: { 
+                    backgroundColor: '#0f172a',
+                    padding: 12,
+                    titleFont: { family: 'Outfit', size: 14 },
+                    bodyFont: { family: 'Plus Jakarta Sans', size: 13 },
                     callbacks: { 
                         label: function(context) { return '₹' + context.parsed.y.toLocaleString(); } 
                     } 
@@ -377,9 +422,20 @@ function renderROIChart(lead) {
             scales: {
                 y: { 
                     beginAtZero: true, 
-                    ticks: { callback: function(value) { return '₹' + (value/1000) + 'k'; }, font: { family: 'Plus Jakarta Sans' } }
+                    grid: { color: 'rgba(15, 23, 42, 0.05)' },
+                    ticks: { 
+                        callback: function(value) { return '₹' + (value/1000) + 'k'; }, 
+                        font: { family: 'Plus Jakarta Sans', weight: '600' },
+                        color: '#64748b'
+                    }
                 },
-                x: { ticks: { font: { family: 'Plus Jakarta Sans' } } }
+                x: { 
+                    grid: { display: false },
+                    ticks: { 
+                        font: { family: 'Plus Jakarta Sans', weight: '600' },
+                        color: '#64748b'
+                    } 
+                }
             }
         }
     });
