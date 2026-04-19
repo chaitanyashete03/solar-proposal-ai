@@ -353,7 +353,7 @@ tbody tr:hover {
 .proposal-letterhead {
     background: var(--doc-bg);
     color: var(--doc-text);
-    padding: 4rem 4rem 3rem 4rem;
+    padding: 2rem; /* Reduced from 4rem to stop html2pdf from cutting off the top visually */
     border-radius: 4px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     font-family: 'Plus Jakarta Sans', sans-serif;

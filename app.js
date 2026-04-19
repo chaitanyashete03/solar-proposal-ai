@@ -300,14 +300,14 @@ TONE & FORMAT:
 function generatePDF() {
     if(printBtn.classList.contains('disabled')) return;
     
-    // Temporarily hide actions for printing
+    // Most stable configuration for accurate HTML to PDF exporting
     const opt = {
-        margin:       [0.4, 0, 0.4, 0], // Margins for top and bottom to avoid absolute edge cutting
+        margin:       0.5, // Uniform 0.5 inch margin prevents absolute edge cuts perfectly
         filename:     `${proposalTitle.innerText.replace(/\s+/g, '_')}.pdf`,
-        image:        { type: 'jpeg', quality: 1.0 }, // Max quality
-        html2canvas:  { scale: 3, useCORS: true, letterRendering: true }, // Ultra crisp resolution 
+        image:        { type: 'jpeg', quality: 1.0 },
+        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 }, // scale: 2 avoids canvas limits; scrollY: 0 fixes top-cutoff bugs if user scrolled
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
-        pagebreak:    { mode: ['css', 'legacy'] } // Enable smart CSS based page breaking
+        pagebreak:    { mode: 'css', avoid: ['h2', 'h3', 'p', 'li', '.chart-wrapper', '.signature-block'] } // Explicit hardware avoid array
     };
     
     html2pdf().set(opt).from(proposalContent).save();
