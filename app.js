@@ -81,10 +81,10 @@ function handleNewLead(e) {
         return;
     }
 
-    // Phone Regex (supports various formats, simple check)
-    const phoneRegex = /^[+]?[\d\s\-]{10,15}$/;
+    // Phone Regex (Exactly 10 digits)
+    const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(phone)) {
-        alert("Please enter a valid contact number (at least 10 digits).");
+        alert("Please enter a valid 10-digit contact number.");
         return;
     }
 
