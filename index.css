@@ -340,3 +340,141 @@ input:focus, select:focus {
     padding: 5rem;
     color: var(--text-main);
 }
+
+/* -------------------------------------------------------------
+ * SUPER DESIGN: PREMIUM PDF & PROPOSAL STYLING
+ * ------------------------------------------------------------- */
+.proposal-letterhead.super-design {
+    padding: 0;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 8px; /* High-end sharp book look */
+    position: relative;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.premium-banner {
+    height: 12px;
+    background: var(--primary-gradient);
+    width: 100%;
+}
+
+.super-design .letterhead-top {
+    padding: 3rem 3rem 1.5rem 3rem;
+    border-bottom: 1px solid #f1f5f9;
+    background: #ffffff;
+    margin-bottom: 2rem;
+}
+
+.brand-block .company-brand {
+    font-family: 'Outfit', sans-serif;
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.25rem;
+}
+
+.super-design .letterhead-client {
+    padding: 0 3rem 2.5rem 3rem;
+    background: transparent;
+    border: none;
+}
+
+.client-info {
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid #f1f5f9;
+}
+
+.client-info h2 { font-size: 1.8rem; color: #0f172a; margin-top: 0.5rem; }
+
+/* HIGHLIGHTS GRID */
+.highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    padding: 0 3rem 3rem 3rem;
+}
+
+.highlight-card {
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.highlight-card i { font-size: 1.5rem; color: #64748b; }
+.highlight-card.accent { background: #fffbeb; border-color: #fef3c7; }
+.highlight-card.accent i { color: var(--primary-color); }
+
+.h-label { font-size: 0.75rem; text-transform: uppercase; font-weight: 800; color: #64748b; letter-spacing: 0.05em; }
+.h-value { font-size: 1.25rem; font-weight: 800; color: #0f172a; }
+
+/* PROPOSAL BODY */
+.super-design .proposal-body {
+    padding: 0 3rem 3rem 3rem;
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.content-section {
+    background: #fff;
+    padding: 0;
+}
+
+.content-section h2 { font-size: 1.5rem; color: #0f172a; margin-top: 2rem; margin-bottom: 1rem; }
+.content-section p { margin-bottom: 1.25rem; color: #334155; }
+
+/* CHART WRAPPER */
+.chart-wrapper {
+    margin: 3rem 0;
+    padding: 2.5rem;
+    background: #f8fafc;
+    border-radius: 24px;
+    border: 1px solid #f1f5f9;
+}
+
+.chart-title { text-align: center; font-size: 1.25rem; margin-bottom: 2rem; color: #0f172a; font-family: 'Outfit'; }
+.canvas-container { height: 350px; position: relative; }
+
+/* FOOTER */
+.super-design .letterhead-footer {
+    background: #0f172a;
+    color: #fff;
+    padding: 3.5rem 3rem;
+    margin-top: 0;
+    border: none;
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2.5rem;
+}
+
+.signature-block .sig-line { border-color: rgba(255,255,255,0.2); width: 220px; }
+.signature-block p { color: #94a3b8; }
+.signature-block strong { color: #fff; }
+
+.contact-block { text-align: right; color: #94a3b8; font-size: 0.95rem; }
+.contact-block p { display: flex; align-items: center; justify-content: flex-end; gap: 0.5rem; margin-bottom: 0.5rem; }
+
+.disclaimer-area {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1.5rem;
+}
+
+.disclaimer-area .footer-note { color: #64748b; text-align: left; font-size: 0.8rem; line-height: 1.5; }
+
+/* PDF PAGINATION */
+.highlight-card, .client-info, .chart-wrapper, .footer-bottom {
+    page-break-inside: avoid !important;
+}

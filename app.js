@@ -197,39 +197,74 @@ async function openProposal(leadId) {
         const refDgt = Math.floor(1000 + Math.random() * 9000);
         
         const polishedHtml = `
-            <div class="proposal-letterhead">
+            <div class="proposal-letterhead super-design">
+                <div class="premium-banner"></div>
                 <div class="letterhead-top">
-                    <div>
+                    <div class="brand-block">
                         <h1 class="company-brand"><i class="ri-sun-fill"></i> Solara Pro AI</h1>
-                        <p class="company-tagline">Premium Solar Architecture</p>
+                        <p class="company-tagline">Premium Solar Architecture & Intelligence</p>
                     </div>
                     <div class="letterhead-meta">
-                        <p><strong>Date:</strong> ${dateStr}</p>
-                        <p><strong>Ref:</strong> SOL-${refDgt}-${new Date().getFullYear()}</p>
+                        <p><strong>ISSUE DATE:</strong> ${dateStr}</p>
+                        <p><strong>QUOTE REF:</strong> SOL-${refDgt}</p>
                     </div>
                 </div>
+
                 <div class="letterhead-client">
-                    <p class="meta-label">Prepared For:</p>
-                    <h2>${lead.name}</h2>
-                    <p>${lead.city} &bull; ${lead.type} Property</p>
+                    <div class="client-info">
+                        <p class="meta-label">Prepared Exclusively For</p>
+                        <h2>${lead.name}</h2>
+                        <p><i class="ri-map-pin-2-line"></i> ${lead.city} &bull; ${lead.type} Property</p>
+                    </div>
+                </div>
+
+                <!-- KEY HIGHLIGHTS CHEAT SHEET -->
+                <div class="highlights-grid">
+                    <div class="highlight-card">
+                        <i class="ri-flashlight-line"></i>
+                        <span class="h-label">System capacity</span>
+                        <span class="h-value">${lead.systemSize} kW</span>
+                    </div>
+                    <div class="highlight-card accent">
+                        <i class="ri-money-rupee-circle-line"></i>
+                        <span class="h-label">Estimated Monthly Saving</span>
+                        <span class="h-value">₹${lead.monthlySavings.toLocaleString()}</span>
+                    </div>
+                    <div class="highlight-card">
+                        <i class="ri-timer-flash-line"></i>
+                        <span class="h-label">Payback period</span>
+                        <span class="h-value">${lead.paybackYears} Years</span>
+                    </div>
                 </div>
                 
                 <div class="proposal-body">
-                    ${rawHtml}
+                    <div class="content-section">
+                        ${rawHtml}
+                    </div>
                     
-                    <div class="chart-wrapper" style="margin: 3rem 0; padding: 2rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
-                        <h3 style="margin-top:0; color:#0f172a; text-align:center; font-family:'Outfit';">10-Year ROI Projection</h3>
-                        <canvas id="roiChart" style="max-height: 350px;"></canvas>
+                    <div class="chart-wrapper">
+                        <h3 class="chart-title">10-Year ROI Projection</h3>
+                        <div class="canvas-container">
+                            <canvas id="roiChart"></canvas>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="letterhead-footer">
-                    <div class="signature-block">
-                        <div class="sig-line"></div>
-                        <p>Authorized Signature</p>
-                        <p><strong>Energy Consultant</strong></p>
+                    <div class="footer-bottom">
+                        <div class="signature-block">
+                            <div class="sig-line"></div>
+                            <p>Authorized Signature</p>
+                            <p><strong>Energy Lead Consultant</strong></p>
+                        </div>
+                        <div class="contact-block">
+                            <p><i class="ri-global-line"></i> www.solara-pro.ai</p>
+                            <p><i class="ri-mail-line"></i> solutions@solara-pro.ai</p>
+                        </div>
                     </div>
-                    <p class="footer-note">This quote is valid for 30 days from the date of issue.</p>
+                    <div class="disclaimer-area">
+                        <p class="footer-note">This quote is generated via Solara Pro AI and is valid for 30 days. Estimates are based on current solar irradiance data for ${lead.city}.</p>
+                    </div>
                 </div>
             </div>
         `;
@@ -240,16 +275,26 @@ async function openProposal(leadId) {
         saveLeads();
         renderCRM();
 
-        // Update UI
+        // Refined Success Flow
         proposalContent.innerHTML = polishedHtml;
-        renderROIChart(lead); // Initialize visually stunning dataviz chart
         
+        // Ensure UI updates before chart rendering to avoid crash-loops
+        setTimeout(() => {
+            try {
+                renderROIChart(lead);
+            } catch (e) {
+                console.error("ROI Chart render failed:", e);
+            }
+        }, 100);
+
         loadingState.classList.add('hidden');
         proposalContent.classList.remove('hidden');
         printBtn.classList.remove('disabled');
 
     } catch (error) {
+        console.error("Proposal flow failed:", error);
         alert("Failed to generate proposal: " + error.message);
+        loadingState.classList.add('hidden'); // Always stop spinner on error
         proposalModal.classList.remove('active');
     }
 }
