@@ -42,7 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (settingsModal) settingsModal.classList.remove('active');
     });
     if (closeProposalBtn) closeProposalBtn.addEventListener('click', () => {
-        if (proposalModal) proposalModal.classList.remove('active');
+        if (proposalModal) {
+            proposalModal.classList.remove('active');
+            // Clean up to prevent ghost proposals
+            setTimeout(() => {
+                proposalContent.innerHTML = '';
+                proposalTitle.innerText = 'Generating Proposal...';
+                if(activeChart) { activeChart.destroy(); activeChart = null; }
+            }, 300); // Wait for transition
+        }
     });
 
     if (saveApiBtn) saveApiBtn.addEventListener('click', () => {
