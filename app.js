@@ -319,12 +319,12 @@ async function openProposal(leadId) {
                 renderROIChart(lead);
             } catch (e) {
                 console.error("ROI Chart render failed:", e);
+            } finally {
+                loadingState.classList.add('hidden');
+                proposalContent.classList.remove('hidden');
+                printBtn.classList.remove('disabled');
             }
         }, 100);
-
-        loadingState.classList.add('hidden');
-        proposalContent.classList.remove('hidden');
-        printBtn.classList.remove('disabled');
 
     } catch (error) {
         console.error("Proposal flow failed:", error);
@@ -408,7 +408,7 @@ TONE & FORMAT:
 }
 
 // PDF Generation using html2pdf
-function generatePDF() {
+async function generatePDF() {
     if(printBtn.classList.contains('disabled')) return;
     
     // Most stable configuration for accurate HTML to PDF exporting
@@ -421,7 +421,20 @@ function generatePDF() {
         pagebreak:    { mode: 'css', avoid: ['h2', 'h3', 'p', 'li', '.chart-wrapper', '.signature-block'] } // Explicit hardware avoid array
     };
     
-    html2pdf().set(opt).from(proposalContent).save();
+    // Add visual loading state specifically for the PDF button
+    const originalText = printBtn.innerHTML;
+    printBtn.innerHTML = '<i class="ri-loader-4-line spin"></i> Saving PDF...';
+    printBtn.classList.add('disabled');
+
+    try {
+        await html2pdf().set(opt).from(proposalContent).save();
+    } catch(e) {
+        console.error("PDF export error", e);
+        alert("Failed to export PDF properly.");
+    } finally {
+        printBtn.innerHTML = originalText;
+        printBtn.classList.remove('disabled');
+    }
 }
 
 // -------------------------------------------------------------
